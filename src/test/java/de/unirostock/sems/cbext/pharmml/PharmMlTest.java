@@ -43,19 +43,19 @@ public class PharmMlTest
 			try
 			{
 				String validMime = Files.probeContentType (validFile.toPath ());
-				assertNotNull (pmr.getFormatByParsing (validFile, validMime));
+				assertNotNull ("expected pharmml format for pharmml file", pmr.getFormatByParsing (validFile, validMime));
 				
 				String invalidMime = Files.probeContentType (invalidFile.toPath ());
-				assertNull (pmr.getFormatByParsing (invalidFile, invalidMime));
+				assertNull ("did not expect a format for an invalid file", pmr.getFormatByParsing (invalidFile, invalidMime));
 
-				assertNull (pmr.getFormatFromMime ("application/xml"));
-				assertNull (pmr.getFormatFromMime (null));
+				assertNull ("did not expect a format for just a mime type", pmr.getFormatFromMime ("application/xml"));
+				assertNull ("did not expect a format for null mime", pmr.getFormatFromMime (null));
 
 
-				assertNull (pmr.getFormatFromExtension ("something"));
-				assertEquals ("http://identifiers.org/combine.specifications/pharmml",
+				assertNull ("did not expect a format for invalid ext", pmr.getFormatFromExtension ("something"));
+				assertEquals ("did expect pharmml format for pharmml ext", "http://identifiers.org/combine.specifications/pharmml",
 					pmr.getFormatFromExtension ("pharmml").toString ());
-				assertNull (pmr.getFormatFromExtension (null));
+				assertNull ("did not expect a format for null ext", pmr.getFormatFromExtension (null));
 				
 			}
 			catch (IOException e)

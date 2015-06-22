@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PharmML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.pharmml.org/2013/03/PharmML"
+    xsi:schemaLocation="http://www.pharmml.org/2013/03/PharmML http://www.pharmml.org/2013/03/PharmML"
+    xmlns:math="http://www.pharmml.org/2013/03/Maths"
+    xmlns:ct="http://www.pharmml.org/2013/03/CommonTypes"
+    xmlns:ds="http://www.pharmml.org/2013/08/Dataset"
+    xmlns:mdef="http://www.pharmml.org/2013/03/ModelDefinition"
+    xmlns:mstep="http://www.pharmml.org/2013/03/ModellingSteps"
+    xmlns:mml="http://www.pharmml.org/2013/03/PharmML"
+    writtenVersion="0.3.1" id="i1"> 
+    
+    <ct:Name>VanCauter_1992_C-peptide_kinetics</ct:Name>
+    
+    <ct:Description>Estimation of insulin secretion rates from C-peptide levels. Comparison of individual and standard kinetic parameters for C-peptide clearance.  
+Van Cauter E, Mestrez F, Sturis J, Polonsky KS
+Diabetes, 3/1992, Volume 41, Issue 3, pages: 368-377</ct:Description>
+      
+    <IndependentVariable symbId="t" />
+    <ModelDefinition xmlns="http://www.pharmml.org/2013/03/ModelDefinition">
+        
+        <CovariateModel blkId="covariates">
+            <Covariate symbId="wt">
+                <Continuous>
+                    <Transformation>
+                        <math:Equation>
+                            <ct:SymbRef symbIdRef="wt"></ct:SymbRef>
+                        </math:Equation>
+                    </Transformation>
+                </Continuous>
+            </Covariate>
+            <Covariate symbId="ht">
+                <Continuous>
+                    <Transformation>
+                        <math:Equation>
+                            <ct:SymbRef symbIdRef="ht"></ct:SymbRef>
+                        </math:Equation>
+                    </Transformation>
+                </Continuous>
+            </Covariate>
+            <Covariate symbId="age">
+                <Continuous>
+                    <Transformation>
+                        <math:Equation>
+                            <ct:SymbRef symbIdRef="age"></ct:SymbRef>
+                        </math:Equation>
+                    </Transformation>
+                </Continuous>
+            </Covariate>
+            <Covariate symbId="sex">
+                <Categorical>
+                    <Category catId="female" />
+                    <Category catId="male" />
+                </Categorical>
+            </Covariate>
+            <Covariate symbId="T2D">
+                <Categorical>
+                    <Category catId="diabetic" />
+                    <Category catId="nondiabetic" />
+                </Categorical>
+            </Covariate>
+        </CovariateModel>
+        
+        <ParameterModel blkId="parameters"> 
+        	<!-- BSA -->
+            <SimpleParameter symbId="BSA">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Binop op="times">
+                            <ct:Real>0.2024726</ct:Real>
+                            <math:Binop op="times">
+                                <math:Binop op="power">
+                                    <ct:SymbRef blkIdRef="covariates" symbIdRef="wt"/>
+                                    <ct:Real>0.425</ct:Real>
+                                </math:Binop>
+                                <math:Binop op="power">
+                                    <ct:SymbRef blkIdRef="covariates" symbIdRef="ht"/>
+                                    <ct:Real>0.725</ct:Real>
+                                </math:Binop>
+                            </math:Binop>
+                        </math:Binop>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+            <!-- BMI -->
+            <SimpleParameter symbId="BMI">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Binop op="divide">
+                            <ct:SymbRef blkIdRef="covariates" symbIdRef="wt"/>
+                            <math:Binop op="power">
+                                <ct:SymbRef blkIdRef="covariates" symbIdRef="ht"/>
+                                <ct:Int>2</ct:Int>
+                            </math:Binop>
+                        </math:Binop>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+            <!--NOD-->
+            <SimpleParameter symbId="NOD">
+                <ct:Assign>
+                	<math:Equation>
+                		<math:Piecewise>
+                			<math:Piece>
+                				<ct:Int>1</ct:Int>
+                				<math:Condition>
+                					<math:LogicBinop op="and">
+                						<math:LogicBinop op="eq">
+                							<ct:SymbRef blkIdRef="covariates" symbIdRef="T2D"/>
+                							<ct:String>nondiabetic</ct:String>
+                						</math:LogicBinop>
+                						<math:LogicBinop op="leq">
+                							<ct:SymbRef symbIdRef="BMI"/>
+                							<ct:Int>27</ct:Int>
+                						</math:LogicBinop>
+                					</math:LogicBinop>
+                				</math:Condition>
+                			</math:Piece>
+                			<math:Piece>
+                				<ct:Int>2</ct:Int>
+                				<math:Condition>
+                					<math:LogicBinop op="and">
+                						<math:LogicBinop op="eq">
+                							<ct:SymbRef blkIdRef="covariates" symbIdRef="T2D"/>
+                							<ct:String>nondiabetic</ct:String>
+                						</math:LogicBinop>
+                						<math:LogicBinop op="gt">
+                							<ct:SymbRef symbIdRef="BMI"/>
+                							<ct:Int>27</ct:Int>
+                						</math:LogicBinop>
+                					</math:LogicBinop>
+                				</math:Condition>
+                			</math:Piece>
+                			<math:Piece>
+                				<ct:Int>3</ct:Int>
+                				<math:Condition>                					
+               						<math:LogicBinop op="eq">
+               							<ct:SymbRef blkIdRef="covariates" symbIdRef="T2D"/>
+               							<ct:String>diabetic</ct:String>
+               						</math:LogicBinop>
+                				</math:Condition>
+                			</math:Piece>
+                		</math:Piecewise>
+                	</math:Equation>
+                </ct:Assign>                     
+            </SimpleParameter>
+            <!--T1-->
+            <SimpleParameter symbId="T1">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Piecewise>
+                            <math:Piece>
+                                <ct:Real>4.52</ct:Real>
+                                <math:Condition>
+                                    <math:LogicBinop op="eq">
+                                        <ct:SymbRef symbIdRef="NOD"/>
+                                        <ct:Real>3</ct:Real>
+                                    </math:LogicBinop>
+                                </math:Condition>
+                            </math:Piece>
+                            <math:Piece>
+                                <ct:Real>4.55</ct:Real>
+                                <math:Condition>
+                                    <math:LogicBinop op="eq">
+                                        <ct:SymbRef symbIdRef="NOD"/>
+                                        <ct:Real>2</ct:Real>
+                                    </math:LogicBinop>
+                                </math:Condition>
+                            </math:Piece>
+                            <math:Piece>
+                                <ct:Real>4.95</ct:Real>
+                                <math:Condition>
+                                    <math:LogicBinop op="eq">
+                                        <ct:SymbRef symbIdRef="NOD"/>
+                                        <ct:Real>1</ct:Real>
+                                    </math:LogicBinop>
+                                </math:Condition>
+                            </math:Piece>
+                        </math:Piecewise>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+            <!--T2-->
+            <SimpleParameter symbId="T2">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Binop op="plus">
+                            <ct:Real>29.2</ct:Real>
+                            <math:Binop op="times">
+                                <ct:Real>0.14</ct:Real>
+                                <ct:SymbRef blkIdRef="covariates" symbIdRef="age" />
+                            </math:Binop>
+                        </math:Binop>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+            <!--V-->
+            <SimpleParameter symbId="V">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Piecewise>
+                            <math:Piece>
+                                <math:Binop op="plus">
+                                    <math:Binop op="times">
+                                        <ct:Real>1.92</ct:Real>
+                                        <ct:SymbRef symbIdRef="BSA"/>
+                                    </math:Binop>
+                                    <ct:Real>0.64</ct:Real>
+                                </math:Binop>
+                                <math:Condition>
+                                    <math:LogicBinop op="eq">
+                                        <ct:SymbRef blkIdRef="covariates" symbIdRef="sex" />
+                                        <ct:String>male</ct:String>
+                                    </math:LogicBinop>
+                                </math:Condition>
+                            </math:Piece>
+                            <math:Piece>
+                                <math:Binop op="plus">
+                                    <math:Binop op="times">
+                                        <ct:Real>1.11</ct:Real>
+                                        <ct:SymbRef symbIdRef="BSA"/>
+                                    </math:Binop>
+                                    <ct:Real>2.04</ct:Real>
+                                </math:Binop>
+                                <math:Condition>
+                                    <math:LogicBinop op="eq">
+                                        <ct:SymbRef blkIdRef="covariates" symbIdRef="sex" />
+                                        <ct:String>female</ct:String>
+                                    </math:LogicBinop>
+                                </math:Condition>
+                            </math:Piece>
+                        </math:Piecewise>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+            <!--F-->
+            <SimpleParameter symbId="F">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Piecewise>
+                            <math:Piece>
+                                <ct:Real>0.78</ct:Real>
+                                <math:Condition>
+                                    <math:LogicBinop op="eq">
+                                        <ct:SymbRef symbIdRef="NOD"/>
+                                        <ct:Real>3</ct:Real>
+                                    </math:LogicBinop>
+                                </math:Condition>
+                            </math:Piece>
+                            <math:Piece>
+                                <ct:Real>0.78</ct:Real>
+                                <math:Condition>
+                                    <math:LogicBinop op="eq">
+                                        <ct:SymbRef symbIdRef="NOD"/>
+                                        <ct:Real>2</ct:Real>
+                                    </math:LogicBinop>
+                                </math:Condition>
+                            </math:Piece>
+                            <math:Piece>
+                                <ct:Real>0.76</ct:Real>
+                                <math:Condition>
+                                    <math:LogicBinop op="eq">
+                                        <ct:SymbRef symbIdRef="NOD"/>
+                                        <ct:Real>1</ct:Real>
+                                    </math:LogicBinop>
+                                </math:Condition>
+                            </math:Piece>
+                        </math:Piecewise>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+            <!--A-->
+            <SimpleParameter symbId="A">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Binop op="divide">
+                            <ct:SymbRef symbIdRef="F"></ct:SymbRef>
+                            <ct:SymbRef symbIdRef="V"></ct:SymbRef>
+                        </math:Binop>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+            <!--B-->
+            <SimpleParameter symbId="B">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Binop op="divide">
+                            <math:Binop op="minus">
+                                <ct:Real>1</ct:Real>
+                                <ct:SymbRef symbIdRef="F"/>
+                            </math:Binop>
+                            <ct:SymbRef symbIdRef="V"/>
+                        </math:Binop>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+            <!--a-->
+            <SimpleParameter symbId="a">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Binop op="divide">
+                            <math:Uniop op="log">
+                                <ct:Real>2</ct:Real>
+                            </math:Uniop>
+                            <ct:SymbRef symbIdRef="T1"/>
+                        </math:Binop>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+            <!--b-->
+            <SimpleParameter symbId="b">
+                <ct:Assign>
+                    <math:Equation>
+                        <math:Binop op="divide">
+                            <math:Uniop op="log">
+                                <ct:Real>2</ct:Real>
+                            </math:Uniop>
+                            <ct:SymbRef symbIdRef="T2"/>
+                        </math:Binop>
+                    </math:Equation>
+                </ct:Assign>
+            </SimpleParameter>
+        </ParameterModel>
+        
+        <StructuralModel blkId="VanCauter">
+            <ct:Variable symbolType="real" symbId="ISR" />
+            <ct:DerivativeVariable symbId="x1" symbolType="real">
+                <ct:Assign>
+                    <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+                        <Binop op="plus">
+                            <Binop op="times">
+                                <Uniop op="minus">
+                                    <ct:SymbRef blkIdRef="parameters" symbIdRef="a" />
+                                </Uniop>
+                                <ct:SymbRef symbIdRef="x1" />
+                            </Binop>
+                            <ct:SymbRef symbIdRef="ISR" />
+                        </Binop>
+                    </Equation>
+                </ct:Assign>
+                <ct:IndependentVariable>
+                    <ct:SymbRef symbIdRef="t"/>
+                </ct:IndependentVariable>
+                <ct:InitialCondition>
+                	<ct:InitialValue>
+                		<ct:Assign>
+	                        <ct:Real>0</ct:Real>
+	                    </ct:Assign>
+                	</ct:InitialValue>
+                </ct:InitialCondition>
+            </ct:DerivativeVariable>
+            <ct:DerivativeVariable symbId="x2" symbolType="real">
+                <ct:Assign>
+                    <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+                        <Binop op="plus">
+                            <Binop op="times">
+                                <Uniop op="minus">
+                                    <ct:SymbRef blkIdRef="parameters" symbIdRef="b" />
+                                </Uniop>
+                                <ct:SymbRef symbIdRef="x2" />
+                            </Binop>
+                            <ct:SymbRef symbIdRef="ISR" />
+                        </Binop>
+                    </Equation>
+                </ct:Assign>
+                <ct:IndependentVariable>
+                    <ct:SymbRef symbIdRef="t"/>
+                </ct:IndependentVariable>
+                <ct:InitialCondition>
+                	<ct:InitialValue>
+                		<ct:Assign>
+	                        <ct:Real>0</ct:Real>
+	                    </ct:Assign>
+                	</ct:InitialValue>
+                </ct:InitialCondition>
+            </ct:DerivativeVariable>
+            <ct:Variable symbId="C" symbolType="real">
+                <ct:Assign>
+                    <Equation xmlns="http://www.pharmml.org/2013/03/Maths">
+                        <Binop op="plus">
+                            <Binop op="times">
+                                <ct:SymbRef blkIdRef="parameters" symbIdRef="A"/>
+                                <ct:SymbRef symbIdRef="x1" />
+                            </Binop>
+                            <Binop op="times">
+                                <ct:SymbRef blkIdRef="parameters" symbIdRef="B"/>
+                                <ct:SymbRef symbIdRef="x2" />
+                            </Binop>
+                        </Binop>
+                    </Equation>
+                </ct:Assign>
+            </ct:Variable>
+        </StructuralModel>
+        
+    </ModelDefinition>
+    
+	<TrialDesign xmlns="http://www.pharmml.org/2013/03/TrialDesign">
+		<Structure>
+			<Epoch oid="ep">
+				<Start>
+					<ct:Real>0</ct:Real>
+				</Start>
+				<End>
+					<ct:Real>120</ct:Real>
+				</End>
+				<Order>1</Order>
+			</Epoch>
+			<Arm oid="arm" />
+			<Cell oid="cell">
+				<EpochRef oidRef="ep" />
+ 				<ArmRef oidRef="arm" />
+				<SegmentRef oidRef="seg" />
+			</Cell>
+			<Segment oid="seg">
+				<ActivityRef oidRef="act1" />
+				<ActivityRef oidRef="act2" />
+				<ActivityRef oidRef="act3" />
+			</Segment>
+			<Activity oid="act1">
+				<Bolus>
+					<DoseAmount inputTarget="derivativeVariable">
+						<ct:SymbRef blkIdRef="VanCauter" symbIdRef="x1" />
+						<ct:Assign>
+							<ct:Real>49.65</ct:Real>
+						</ct:Assign>
+					</DoseAmount>
+					<DosingTimes>
+						<ct:Assign>
+							<ct:Real>0</ct:Real>
+						</ct:Assign>
+					</DosingTimes>
+				</Bolus>
+			</Activity>
+			<Activity oid="act2">				
+				<Bolus>
+					<DoseAmount inputTarget="derivativeVariable">
+						<ct:SymbRef blkIdRef="VanCauter" symbIdRef="x2" />
+						<ct:Assign>
+							<ct:Real>49.65</ct:Real>
+						</ct:Assign>
+					</DoseAmount>
+					<DosingTimes>
+						<ct:Assign>
+							<ct:Real>0</ct:Real>
+						</ct:Assign>
+					</DosingTimes>
+				</Bolus>
+			</Activity>
+			<Activity oid="act3">
+				<Infusion>
+					<DoseAmount inputTarget="variable">
+						<ct:SymbRef blkIdRef="VanCauter" symbIdRef="ISR" />
+						<ct:Assign>
+							<ct:Real>0</ct:Real>
+						</ct:Assign>
+					</DoseAmount>
+					<DosingTimes>
+						<ct:Assign>
+							<ct:Real>0</ct:Real>
+						</ct:Assign>
+					</DosingTimes>
+				</Infusion>
+			</Activity>
+		</Structure>
+		
+		<Population>
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="SEX" />
+				<ct:SymbRef blkIdRef="covariates" symbIdRef="sex" />
+			</ColumnMapping>
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="AGE" />
+				<ct:SymbRef blkIdRef="covariates" symbIdRef="age" />
+			</ColumnMapping>
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="WT" />
+				<ct:SymbRef blkIdRef="covariates" symbIdRef="wt" />
+			</ColumnMapping>
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="HT" />
+				<ct:SymbRef blkIdRef="covariates" symbIdRef="ht" />
+			</ColumnMapping>
+				
+			<ColumnMapping>
+				<ds:ColumnRef columnIdRef="T2D" />
+				<ct:SymbRef blkIdRef="covariates" symbIdRef="T2D" />
+			</ColumnMapping>
+			<ds:DataSet>
+				<ds:Definition>
+					<ds:Column columnId="SEX" columnType="covariate" valueType="id" columnNum="1" />
+					<ds:Column columnId="AGE" columnType="covariate" valueType="real" columnNum="2" />
+					<ds:Column columnId="WT" columnType="covariate" valueType="real" columnNum="3" />
+					<ds:Column columnId="HT" columnType="covariate" valueType="real" columnNum="4" />
+					<ds:Column columnId="T2D" columnType="covariate" valueType="id" columnNum="5" />
+				</ds:Definition>
+ 				<ds:Table> 
+ 					<ds:Row><ct:Id>male</ct:Id><ct:Real>28.1</ct:Real><ct:Real>69.4</ct:Real><ct:Real>1.74</ct:Real><ct:Id>nondiabetic</ct:Id></ds:Row>
+ 				</ds:Table>
+			</ds:DataSet>
+		</Population>
+	</TrialDesign>
+
+	<mstep:ModellingSteps>
+		<mstep:SimulationStep oid="sim">
+			<mstep:Observations>			
+				<mstep:Timepoints>
+            		<ct:Vector>
+            			<ct:Real>1.8136</ct:Real><ct:Real>2.8010</ct:Real><ct:Real>3.7048</ct:Real><ct:Real>4.7397</ct:Real><ct:Real>5.7939</ct:Real><ct:Real>6.8482</ct:Real><ct:Real>7.9154</ct:Real><ct:Real>8.8731</ct:Real><ct:Real>9.5796</ct:Real>
+   						<ct:Real>10.7778</ct:Real><ct:Real>13.6791</ct:Real><ct:Real>16.9605</ct:Real><ct:Real>19.7566</ct:Real><ct:Real>24.7454</ct:Real><ct:Real>29.9919</ct:Real><ct:Real>34.8733</ct:Real><ct:Real>40.3647</ct:Real>
+   						<ct:Real>45.2526</ct:Real><ct:Real>50.2651</ct:Real><ct:Real>55.2754</ct:Real><ct:Real>60.2901</ct:Real><ct:Real>70.5664</ct:Real><ct:Real>80.3573</ct:Real><ct:Real>90.3952</ct:Real><ct:Real>100.0659</ct:Real>
+   						<ct:Real>110.2241</ct:Real><ct:Real>119.8969</ct:Real>
+            		</ct:Vector>
+				</mstep:Timepoints>	
+				<mstep:Continuous>
+					<ct:SymbRef blkIdRef="VanCauter" symbIdRef="C" />
+				</mstep:Continuous>			
+			</mstep:Observations>
+			<mstep:Operation order="1" opType="simulatePK">
+				<mstep:Property name="software-tool-name">
+                    <ct:Assign>
+                        <ct:String>NONMEM</ct:String>
+                    </ct:Assign>
+                </mstep:Property>
+                <mstep:Property name="software-tool-version">
+                    <ct:Assign>
+                        <ct:Real>7.2</ct:Real>
+                    </ct:Assign>
+                </mstep:Property>
+                <mstep:Algorithm definition="FO">
+                	<mstep:Property name="Seed">
+                        <ct:Assign>
+                            <ct:Int>123</ct:Int>
+                        </ct:Assign>
+                    </mstep:Property>
+                    <mstep:Property name="NM">
+                        <ct:Assign>
+                            <ct:String>ONLYSIM</ct:String>
+                        </ct:Assign>
+                    </mstep:Property>
+                </mstep:Algorithm>
+			</mstep:Operation>
+		</mstep:SimulationStep>			
+	</mstep:ModellingSteps>
+	    
+</PharmML>

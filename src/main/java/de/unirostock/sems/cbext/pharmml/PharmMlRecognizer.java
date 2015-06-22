@@ -16,6 +16,8 @@ import eu.ddmore.libpharmml.PharmMlFactory;
 
 /**
  * The Class PharmMlFormatizer to recognize PharmML files.
+ * 
+ * @author Martin Scharm
  */
 public class PharmMlRecognizer extends FormatRecognizer {
 	

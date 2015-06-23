@@ -30,12 +30,17 @@ import de.unirostock.sems.cbext.Iconizer;
 public class PharmMlTest
 {
 	
+	/**
+	 * 
+	 */
 	@Before
 	public void initStuff ()
 	{
 		Formatizer.removeRecognizers ();
 		Formatizer.addDefaultRecognizers ();
 		
+		Iconizer.removeCollections ();
+		Iconizer.addDefaultCollection ();
 	}
     /**
      * Test recognizer.
@@ -52,6 +57,7 @@ public class PharmMlTest
 			{
 				String validMime = Files.probeContentType (validFile.toPath ());
 				assertNotNull ("expected pharmml format for pharmml file", pmr.getFormatByParsing (validFile, validMime));
+				assertNull ("expected null format for wrong mime", pmr.getFormatByParsing (validFile, "something"));
 				
 				String invalidMime = Files.probeContentType (invalidFile.toPath ());
 				assertNull ("did not expect a format for an invalid file", pmr.getFormatByParsing (invalidFile, invalidMime));
@@ -73,6 +79,9 @@ public class PharmMlTest
 			}
     }
 	
+	/**
+	 * Test icon collection.
+	 */
 	@Test
 	public void testIconCollection ()
 	{
@@ -111,11 +120,13 @@ public class PharmMlTest
 		}
 	}
 	
+	/**
+	 * Test iconizer.
+	 */
 	@Test
 	public void testIconizer ()
 	{
 
-		Iconizer iconizr = new Iconizer ();
 		URI pharmml = FormatRecognizer.buildUri (FormatRecognizer.IDENTIFIERS_BASE, "pharmml");
 		
 		// test empty icon

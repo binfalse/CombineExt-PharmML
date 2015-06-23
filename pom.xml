@@ -28,7 +28,7 @@
     <dependency>
       <groupId>de.unirostock.sems</groupId>
       <artifactId>CombineExt</artifactId>
-      <version>0.9.1</version>
+      <version>0.9.2</version>
     </dependency>
   </dependencies>
 </project>

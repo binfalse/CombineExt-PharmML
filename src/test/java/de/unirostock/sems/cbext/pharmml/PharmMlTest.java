@@ -140,7 +140,7 @@ public class PharmMlTest
     
     
     
-		Iconizer.addIconMapper (new PharmMlIcon ());
+		Iconizer.addIconCollection (new PharmMlIcon ());
     
     
     
@@ -165,6 +165,18 @@ public class PharmMlTest
     
 		assertEquals ("expected to get the pharmml icon", "Green-pharmml.png", Iconizer.formatToIcon (pharmml));
 		assertTrue ("expected to get the pharmml icon", Iconizer.formatToIconUrl (pharmml).toString ().endsWith ("Green-pharmml.png"));
+		
+		
+		
+		// also test the demo
+		try
+		{
+			Demo.demo ();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	/**

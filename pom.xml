@@ -3,7 +3,7 @@
 
   <groupId>de.unirostock.sems</groupId>
   <artifactId>CombineExtPharmML</artifactId>
-  <version>0.8</version>
+  <version>10.9</version>
   <packaging>jar</packaging>
 
   <name>CombineExtPharmML</name>

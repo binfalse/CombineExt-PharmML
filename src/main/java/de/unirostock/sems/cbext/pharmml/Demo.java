@@ -53,10 +53,17 @@ public class Demo
 		// first: detecting the format of a file
 		
 		File pharmmlFile = new File ("test/vancauter_v1.xml");
-		// add the pharmml recognizer to the formatizer
-		Formatizer.addFormatRecognizer (new PharmMlRecognizer ());
-		// guess the format
+		// guess the format w/o this extension
 		URI format = Formatizer.guessFormat (pharmmlFile);
+		System.out.println ("the format of file " + pharmmlFile
+			+ " is recognized as " + format);
+		
+		// add the pharmml recognizer to the formatizer
+		System.out.println ("adding this extension to recognize PharmML");
+		Formatizer.addFormatRecognizer (new PharmMlRecognizer ());
+		
+		// guess the format w/ this extension
+		format = Formatizer.guessFormat (pharmmlFile);
 		System.out.println ("the format of file " + pharmmlFile
 			+ " is recognized as " + format);
 		
@@ -65,8 +72,20 @@ public class Demo
 		
 		// second: get an icon for pharmml files
 		
+		// get icon name w/o this extension
+		System.out.println ("icon name for pharmml files"
+			+ "w/o this extension: " + 
+			Iconizer.formatToIcon (format));
+		
 		// add the pharmml icon to the iconizer
+		System.out.println ("adding this extension to provide an icon for PharmML");
 		Iconizer.addIconCollection (new PharmMlIcon ());
+
+		// get icon name w/ this extension
+		System.out.println ("icon name for pharmml files "
+			+ "w/ this extension: " + 
+			Iconizer.formatToIcon (format));
+		
 		// lets write the icon for the pharmml format to a temporary file
 		File tmpIcon = File.createTempFile ("pharmml", ".png");
 		

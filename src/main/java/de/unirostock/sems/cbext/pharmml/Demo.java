@@ -22,7 +22,7 @@ public class Demo
      *
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public static void demo () throws IOException
+    public void demo () throws IOException
     {
     	// demonstrate how to use the extension
     	

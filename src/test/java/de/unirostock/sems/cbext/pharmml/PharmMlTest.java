@@ -14,6 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import de.binfalse.bflog.LOGGER;
@@ -28,7 +29,14 @@ import de.unirostock.sems.cbext.Iconizer;
  */
 public class PharmMlTest
 {
-
+	
+	@Before
+	public void initStuff ()
+	{
+		Formatizer.removeRecognizers ();
+		Formatizer.addDefaultRecognizers ();
+		
+	}
     /**
      * Test recognizer.
      *
@@ -166,17 +174,16 @@ public class PharmMlTest
 		assertEquals ("expected to get the pharmml icon", "Green-pharmml.png", Iconizer.formatToIcon (pharmml));
 		assertTrue ("expected to get the pharmml icon", Iconizer.formatToIconUrl (pharmml).toString ().endsWith ("Green-pharmml.png"));
 		
-		
-		
-		// also test the demo
-		try
-		{
-			Demo.demo ();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+	}
+	
+	/**
+	 * Test demo.
+	 * @throws IOException 
+	 */
+	@Test
+	public void testDemo () throws IOException
+	{
+		new Demo ().demo ();
 	}
 	
 	/**

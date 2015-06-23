@@ -1,3 +1,21 @@
+/**
+ * Copyright © 2015 Martin Scharm <martin@binfalse.de>
+ * 
+ * This file is part of the CombineExt library.
+ * 
+ * CombineExt is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * CombineExt is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with CombineExt. If not, see <http://www.gnu.org/licenses/>.
+ */
 package de.unirostock.sems.cbext.pharmml;
 
 import java.io.File;
@@ -14,23 +32,31 @@ import eu.ddmore.libpharmml.IPharmMLValidator;
 import eu.ddmore.libpharmml.IValidationReport;
 import eu.ddmore.libpharmml.PharmMlFactory;
 
+
+
 /**
  * The Class PharmMlFormatizer to recognize PharmML files.
  * 
  * @author Martin Scharm
  */
-public class PharmMlRecognizer extends FormatRecognizer {
+public class PharmMlRecognizer
+	extends FormatRecognizer
+{
 	
 	/**
-	 * As we are mainly working with PharmML files in this project this recognizer will have a higher priority.
+	 * As we are mainly working with PharmML files in this project this recognizer
+	 * will have a higher priority.
 	 */
-	public static int priority = 120;
+	public static int	priority	= 120;
+	
 	
 	@Override
-	public int getPriority() {
+	public int getPriority ()
+	{
 		return priority;
 	}
-
+	
+	
 	@Override
 	public URI getFormatByParsing (File file, String mimeType)
 	{
@@ -40,11 +66,12 @@ public class PharmMlRecognizer extends FormatRecognizer {
 		
 		try
 		{
-			ILibPharmML libPharmML = PharmMlFactory.getInstance().createLibPharmML();
-			InputStream in = new FileInputStream(file);
-			IPharmMLResource resource = libPharmML.createDomFromResource(in);
-			IPharmMLValidator validator = libPharmML.getValidator();
-			IValidationReport rpt = validator.createValidationReport(resource);
+			ILibPharmML libPharmML = PharmMlFactory.getInstance ()
+				.createLibPharmML ();
+			InputStream in = new FileInputStream (file);
+			IPharmMLResource resource = libPharmML.createDomFromResource (in);
+			IPharmMLValidator validator = libPharmML.getValidator ();
+			IValidationReport rpt = validator.createValidationReport (resource);
 			if (rpt.isValid ())
 				return buildUri (IDENTIFIERS_BASE, "pharmml");
 		}
@@ -59,14 +86,16 @@ public class PharmMlRecognizer extends FormatRecognizer {
 		
 		return null;
 	}
-
+	
+	
 	@Override
 	public URI getFormatFromMime (String mime)
 	{
 		// we are not able to decide for a format by just kowing the mime
 		return null;
 	}
-
+	
+	
 	@Override
 	public URI getFormatFromExtension (String extension)
 	{
@@ -75,5 +104,5 @@ public class PharmMlRecognizer extends FormatRecognizer {
 			return buildUri (IDENTIFIERS_BASE, "pharmml");
 		return null;
 	}
-
+	
 }

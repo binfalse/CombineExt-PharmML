@@ -3,7 +3,7 @@
 
     <groupId>de.unirostock.sems</groupId>
     <artifactId>CombineExtPharmML</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>CombineExtPharmML</name>
@@ -69,7 +69,7 @@
         <dependency>
             <groupId>de.unirostock.sems</groupId>
             <artifactId>CombineExt</artifactId>
-            <version>1.0.2</version>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
     <build>

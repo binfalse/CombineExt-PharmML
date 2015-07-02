@@ -32,7 +32,7 @@ import de.unirostock.sems.cbext.IconCollection;
  * 
  */
 public class PharmMlIcon
-	implements IconCollection
+	extends IconCollection
 {
 	
 	private static final String	ICON_NAME	= "Green-pharmml.png";
@@ -40,17 +40,10 @@ public class PharmMlIcon
 	/** The Constant ICON_DIR. */
 	private static final String	ICON_DIR	= "/icons/";
 	
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.unirostock.sems.cbext.IconMapper#getPriority()
-	 */
-	public int getPriority ()
-	{
-		return 110;
+	static {
+		// setting priority
+		priority = 110;
 	}
-	
 	
 	/*
 	 * (non-Javadoc)

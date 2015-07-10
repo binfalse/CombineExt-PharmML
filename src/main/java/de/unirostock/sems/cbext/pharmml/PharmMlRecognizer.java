@@ -26,6 +26,7 @@ import java.net.URI;
 
 import de.binfalse.bflog.LOGGER;
 import de.unirostock.sems.cbext.FormatRecognizer;
+import de.unirostock.sems.cbext.Formatizer;
 import eu.ddmore.libpharmml.ILibPharmML;
 import eu.ddmore.libpharmml.IPharmMLResource;
 import eu.ddmore.libpharmml.IPharmMLValidator;
@@ -49,7 +50,31 @@ public class PharmMlRecognizer
 	 */
 	public static int	priority	= 120;
 	
-	
+	/**
+	 * Sets the priority of this format recognizer and triggers a resort of all
+	 * format recognizers.
+	 * 
+	 * The higher the priority, the earlier this recognizer gets called.
+	 * The first recognizer, which is able to identify a file, determines it's
+	 * format.
+	 * Setting a negative priority will be ignored.
+	 * Default recognizers have a priority of 100.
+	 * 
+	 * @param newPriority
+	 */
+	public static void setPriority (int newPriority) {
+		
+		// no negative priorities!
+		if( priority < 0 )
+			return;
+		
+		priority = newPriority;
+		Formatizer.resortRecognizers();
+	}
+
+	/* (non-Javadoc)
+	 * @see de.unirostock.sems.cbext.FormatRecognizer#getPriority()
+	 */
 	@Override
 	public int getPriority ()
 	{

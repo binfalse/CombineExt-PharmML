@@ -24,6 +24,7 @@ import java.net.URL;
 
 import de.unirostock.sems.cbext.FormatRecognizer;
 import de.unirostock.sems.cbext.IconCollection;
+import de.unirostock.sems.cbext.Iconizer;
 
 
 
@@ -40,9 +41,38 @@ public class PharmMlIcon
 	/** The Constant ICON_DIR. */
 	private static final String	ICON_DIR	= "/icons/";
 	
-	static {
-		// setting priority
-		priority = 110;
+	/** priority for this icon collection */
+	protected static int 			priority			= 100;
+	
+	/**
+	 * Sets the priority of this icon collection and triggers a resort of all
+	 * icon collection.
+	 * 
+	 * The higher the priority, the earlier this collection gets asked.
+	 * The first collection, which is able to provide an icon, determines it's
+	 * icon.
+	 * Setting a negative priority will be ignored.
+	 * Default collections have a priority of 100.
+	 * 
+	 * @param newPriority
+	 */
+	public static void setPriority (int newPriority) {
+		
+		// no negative priorities!
+		if( priority < 0 )
+			return;
+		
+		priority = newPriority;
+		Iconizer.resortCollections ();
+	}
+
+	/* (non-Javadoc)
+	 * @see de.unirostock.sems.cbext.FormatRecognizer#getPriority()
+	 */
+	@Override
+	public int getPriority ()
+	{
+		return priority;
 	}
 	
 	/*

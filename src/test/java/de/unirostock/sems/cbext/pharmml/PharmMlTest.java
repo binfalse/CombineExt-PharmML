@@ -231,7 +231,7 @@ public class PharmMlTest
 			e.printStackTrace ();
 			fail ("failed to read pharmml icon");
 		}
-		assertEquals ("pharmml icon has unexpected size", 1150, noOfBytes);
+		assertEquals ("pharmml icon has unexpected size", 1397, noOfBytes);
 		
 		assertEquals ("expected to get the pharmml icon", "Green-pharmml.png",
 			Iconizer.formatToIcon (pharmml));
